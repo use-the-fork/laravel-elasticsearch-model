@@ -1,17 +1,17 @@
 {
-    "name": ":vendor_slug/:package_slug",
-    "description": ":package_description",
+    "name": "use-the-fork/laravel-elasticsearch-model",
+    "description": "Laravel based elasticsearch model",
     "keywords": [
-        ":vendor_name",
+        "use-the-fork",
         "laravel",
-        ":package_slug"
+        "laravel-elasticsearch-model"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/use-the-fork/laravel-elasticsearch-model",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "Greg L",
+            "email": "sincore@gmail.com",
             "role": "Developer"
         }
     ],
@@ -35,13 +35,13 @@
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src",
-            "VendorName\\Skeleton\\Database\\Factories\\": "database/factories"
+            "UseTheFork\\LaravelElasticsearchModel\\": "src",
+            "UseTheFork\\LaravelElasticsearchModel\\Database\\Factories\\": "database/factories"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests"
+            "UseTheFork\\LaravelElasticsearchModel\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -61,10 +61,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "VendorName\\Skeleton\\SkeletonServiceProvider"
+                "UseTheFork\\LaravelElasticsearchModel\\LaravelElasticsearchModelServiceProvider"
             ],
             "aliases": {
-                "Skeleton": "VendorName\\Skeleton\\Facades\\Skeleton"
+                "LaravelElasticsearchModel": "UseTheFork\\LaravelElasticsearchModel\\Facades\\LaravelElasticsearchModel"
             }
         }
     },
