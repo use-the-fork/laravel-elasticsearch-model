@@ -31,14 +31,15 @@ class Node implements CastsAttributes
      */
     public function set($model, $key, $value, $attributes)
     {
-        if (!$value instanceof \Illuminate\Support\Collection) {
+        if (! $value instanceof \Illuminate\Support\Collection) {
             throw new \InvalidArgumentException(
                 sprintf(
-                    "value must be of type %s",
+                    'value must be of type %s',
                     \Illuminate\Support\Collection::class
                 )
             );
         }
+
         return [$key => $value->toArray()];
     }
 }

@@ -5,14 +5,14 @@ namespace UseTheFork\LaravelElasticsearchModel;
 use Illuminate\Database\Eloquent\Model as BaseModel;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use UseTheFork\LaravelElasticsearchModel\Database\Eloquent\Concerns\HasAttributes;
 use UseTheFork\LaravelElasticsearchModel\Database\Eloquent\Builder;
+use UseTheFork\LaravelElasticsearchModel\Database\Eloquent\Concerns\HasAttributes;
 
 abstract class Model extends BaseModel
 {
     use HasAttributes;
 
-    protected $connection = "elasticsearch";
+    protected $connection = 'elasticsearch';
 
     /**
      * {@inheritDoc}
@@ -62,7 +62,7 @@ abstract class Model extends BaseModel
      */
     public function getDateFormat()
     {
-        return $this->dateFormat ?: "c";
+        return $this->dateFormat ?: 'c';
     }
 
     /**
@@ -71,7 +71,7 @@ abstract class Model extends BaseModel
     protected function getAttributeFromArray($key)
     {
         // Support keys in dot notation.
-        if (Str::contains($key, ".")) {
+        if (Str::contains($key, '.')) {
             return Arr::get($this->attributes, $key);
         }
 
@@ -84,7 +84,7 @@ abstract class Model extends BaseModel
     public function setAttribute($key, $value)
     {
         // Convert _id to ObjectID.
-        if (Str::contains($key, ".")) {
+        if (Str::contains($key, '.')) {
             if (in_array($key, $this->getDates()) && $value) {
                 $value = $this->fromDateTime($value);
             }
