@@ -31,7 +31,7 @@ class Grammar extends BaseGrammar
     {
         $params = [];
 
-        if (!is_array(reset($values))) {
+        if (! is_array(reset($values))) {
             $values = [$values];
         }
 
@@ -43,7 +43,7 @@ class Grammar extends BaseGrammar
                 foreach ($doc['child_documents'] as $childDoc) {
                     $params['body'][] = [
                         'index' => [
-                            '_index' => $builder->from . $this->indexSuffix,
+                            '_index' => $builder->from.$this->indexSuffix,
                             '_id' => $childDoc['id'],
                             'parent' => $doc['id'],
                         ],
@@ -56,7 +56,7 @@ class Grammar extends BaseGrammar
             }
 
             $index = [
-                '_index' => $builder->from . $this->indexSuffix,
+                '_index' => $builder->from.$this->indexSuffix,
                 '_id' => $doc['id'],
             ];
 
@@ -117,7 +117,7 @@ class Grammar extends BaseGrammar
             foreach ($doc['child_documents'] as $childDoc) {
                 $params['body'][] = [
                     'index' => [
-                        '_index' => $builder->from . $this->indexSuffix,
+                        '_index' => $builder->from.$this->indexSuffix,
                         '_id' => $childDoc['id'],
                         'parent' => $docId,
                     ],
@@ -130,7 +130,7 @@ class Grammar extends BaseGrammar
         }
 
         $index = [
-            'index' => $builder->from . $this->indexSuffix,
+            'index' => $builder->from.$this->indexSuffix,
             'id' => $docId,
         ];
 
@@ -186,7 +186,7 @@ class Grammar extends BaseGrammar
         }
 
         $params = [
-            'index' => $builder->from . $this->indexSuffix,
+            'index' => $builder->from.$this->indexSuffix,
         ];
         $params = array_merge($params, $this->compileUpsertBody($values));
 
@@ -204,9 +204,9 @@ class Grammar extends BaseGrammar
         $query = $this->compileWheres($builder);
 
         $params = [
-            'index' => $builder->from . $this->indexSuffix,
+            'index' => $builder->from.$this->indexSuffix,
             'body' => [
-                '_source' => $builder->columns && !in_array('*', $builder->columns)
+                '_source' => $builder->columns && ! in_array('*', $builder->columns)
                     ? $builder->columns
                     : true,
                 'query' => $query['query'],
@@ -243,7 +243,7 @@ class Grammar extends BaseGrammar
             $params['body']['size'] = $builder->limit;
         }
 
-        if (!$params['body']['query']) {
+        if (! $params['body']['query']) {
             unset($params['body']['query']);
         }
 
@@ -265,7 +265,7 @@ class Grammar extends BaseGrammar
     public function compileDocumentSelect(Builder $builder): array
     {
         $params = [
-            'index' => $builder->from . $this->indexSuffix,
+            'index' => $builder->from.$this->indexSuffix,
             'id' => $builder->columns['id'],
         ];
 
@@ -305,8 +305,8 @@ class Grammar extends BaseGrammar
         $key = $aggregation['key'];
 
         $method =
-            'compile' .
-            ucfirst(Str::camel($aggregation['type'])) .
+            'compile'.
+            ucfirst(Str::camel($aggregation['type'])).
             'Aggregation';
 
         $compiled = [
@@ -338,8 +338,8 @@ class Grammar extends BaseGrammar
 
         foreach ($orders as $order) {
             $column = $order['column'];
-            if (Str::startsWith($column, $builder->from . '.')) {
-                $column = Str::replaceFirst($builder->from . '.', '', $column);
+            if (Str::startsWith($column, $builder->from.'.')) {
+                $column = Str::replaceFirst($builder->from.'.', '', $column);
             }
 
             $type = $order['type'] ?? 'basic';
@@ -639,10 +639,10 @@ class Grammar extends BaseGrammar
         $query = $this->applyOptionsToClause($query, $where);
 
         if (
-            !empty($where['not']) ||
-            ($where['operator'] == '!=' && !is_null($value)) ||
+            ! empty($where['not']) ||
+            ($where['operator'] == '!=' && ! is_null($value)) ||
             ($where['operator'] == '=' && is_null($value)) ||
-            ($where['operator'] == 'exists' && !$value)
+            ($where['operator'] == 'exists' && ! $value)
         ) {
             $query = [
                 'bool' => [
@@ -674,7 +674,7 @@ class Grammar extends BaseGrammar
         );
 
         foreach ($options as $option => $value) {
-            $method = 'apply' . studly_case($option) . 'Option';
+            $method = 'apply'.studly_case($option).'Option';
 
             if (method_exists($this, $method)) {
                 $clause = $this->$method($clause, $value, $where);
@@ -750,17 +750,17 @@ class Grammar extends BaseGrammar
         foreach ($clauses as $where) {
             if (
                 isset($where['column']) &&
-                Str::startsWith($where['column'], $builder->from . '.')
+                Str::startsWith($where['column'], $builder->from.'.')
             ) {
                 $where['column'] = Str::replaceFirst(
-                    $builder->from . '.',
+                    $builder->from.'.',
                     '',
                     $where['column']
                 );
             }
 
             // We use different methods to compile different wheres
-            $method = 'compileWhere' . $where['type'];
+            $method = 'compileWhere'.$where['type'];
             $result = $this->{$method}($builder, $where);
 
             /*
@@ -780,7 +780,7 @@ class Grammar extends BaseGrammar
             }
 
             // If this is an 'or' query then add all previous parts to a 'should'
-            if (!$isOr && $where['boolean'] == 'or') {
+            if (! $isOr && $where['boolean'] == 'or') {
                 $isOr = true;
 
                 if ($query) {
@@ -837,7 +837,7 @@ class Grammar extends BaseGrammar
             $compiled['query'] = empty($compiled['filter'])
                 ? ['match_all' => (object) []]
                 : $compiled['filter'];
-        } elseif (!empty($compiled['filter'])) {
+        } elseif (! empty($compiled['filter'])) {
             throw new InvalidArgumentException(
                 'Cannot use both filter and query contexts within a relation context'
             );
@@ -1008,11 +1008,11 @@ class Grammar extends BaseGrammar
     {
         $fields = '_all';
 
-        if (!empty($where['options']['fields'])) {
+        if (! empty($where['options']['fields'])) {
             $fields = $where['options']['fields'];
         }
 
-        if (is_array($fields) && !is_numeric(array_keys($fields)[0])) {
+        if (is_array($fields) && ! is_numeric(array_keys($fields)[0])) {
             $fieldsWithBoosts = [];
 
             foreach ($fields as $field => $boost) {
@@ -1046,7 +1046,7 @@ class Grammar extends BaseGrammar
             ];
         }
 
-        if (!empty($where['options']['fuzziness'])) {
+        if (! empty($where['options']['fuzziness'])) {
             $matchType = array_keys($query)[0];
 
             if ($matchType === 'multi_match') {
@@ -1058,7 +1058,7 @@ class Grammar extends BaseGrammar
             }
         }
 
-        if (!empty($where['options']['constant_score'])) {
+        if (! empty($where['options']['constant_score'])) {
             $query = [
                 'constant_score' => [
                     'query' => $query,

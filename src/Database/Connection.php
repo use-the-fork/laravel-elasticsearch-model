@@ -108,7 +108,7 @@ class Connection extends BaseConnection
      */
     public function __call($method, $parameters)
     {
-        if (!isset($this->connection) || empty($this->connection)) {
+        if (! isset($this->connection) || empty($this->connection)) {
             $this->connection = $this->createConnection(
                 $this->config,
                 $this->options
@@ -168,7 +168,7 @@ class Connection extends BaseConnection
             yield $result;
         }
 
-        if (!$limit || $limit > $numResults) {
+        if (! $limit || $limit > $numResults) {
             $limit = $limit ? $limit - $numResults : $limit;
 
             foreach ($this->scroll($scrollId, $scrollTimeout, $limit)
@@ -260,7 +260,7 @@ class Connection extends BaseConnection
         $numResults = 0;
 
         // Loop until the scroll 'cursors' are exhausted or we have enough results
-        while (!$limit || $numResults < $limit) {
+        while (! $limit || $numResults < $limit) {
             // Execute a Scroll request
             $results = $this->createConnection(
                 $this->hosts,
@@ -453,7 +453,7 @@ class Connection extends BaseConnection
                 $result = $this->connection->bulk($params);
             }
 
-            if (!empty($result['errors'])) {
+            if (! empty($result['errors'])) {
                 throw new BulkInsertQueryException($result);
             }
 
