@@ -179,11 +179,11 @@ class Builder extends BaseBuilder
             return $this;
         }
 
-        if (! is_string($args) && is_callable($args)) {
+        if (!is_string($args) && is_callable($args)) {
             call_user_func($args, $args = $this->newQuery());
         }
 
-        if (! is_string($aggregations) && is_callable($aggregations)) {
+        if (!is_string($aggregations) && is_callable($aggregations)) {
             call_user_func($aggregations, $aggregations = $this->newQuery());
         }
 
@@ -203,10 +203,8 @@ class Builder extends BaseBuilder
             $this->columns = ['*'];
         }
 
-        foreach (
-            $this->connection->cursor($this->toCompiledQuery())
-            as $document
-        ) {
+        foreach ($this->connection->cursor($this->toCompiledQuery())
+            as $document) {
             yield $this->processor->documentFromResult($this, $document);
         }
     }
@@ -219,7 +217,7 @@ class Builder extends BaseBuilder
         // If an ID is passed to the method, we will set the where clause to check the
         // ID to let developers to simply and quickly remove a single row from this
         // database without manually specifying the "where" clauses on the query.
-        if (! is_null($id)) {
+        if (!is_null($id)) {
             $this->where($this->getKeyName(), '=', $id);
         }
 
@@ -227,7 +225,7 @@ class Builder extends BaseBuilder
             $this->grammar->compileDelete($this)
         );
 
-        return ! empty($result['deleted']);
+        return !empty($result['deleted']);
     }
 
     /**
@@ -287,7 +285,7 @@ class Builder extends BaseBuilder
      */
     protected function getResultsOnce($select = true)
     {
-        if (! $this->hasProcessedSelect()) {
+        if (!$this->hasProcessedSelect()) {
             if ($select == true) {
                 $this->results = $this->processor->processSelect(
                     $this,
@@ -474,7 +472,7 @@ class Builder extends BaseBuilder
      */
     public function getSearchDuration()
     {
-        if (! $this->hasProcessedSelect()) {
+        if (!$this->hasProcessedSelect()) {
             $this->getResultsOnce();
         }
 
@@ -493,7 +491,7 @@ class Builder extends BaseBuilder
         foreach ($values as $value) {
             // As soon as we find a value that is not an array we assume the user is
             // inserting a single document.
-            if (! is_array($value)) {
+            if (!is_array($value)) {
                 $batch = false;
                 break;
             }
@@ -501,7 +499,7 @@ class Builder extends BaseBuilder
 
         $this->applyBeforeQueryCallbacks();
 
-        if (! $batch) {
+        if (!$batch) {
             //insert a single value rather then a batch
             return $this->connection->insert(
                 $this->grammar->compileIndex($this, $values)
@@ -533,7 +531,7 @@ class Builder extends BaseBuilder
         }
 
         throw new Exception(
-            "{$option} is an invalid conflict option, valid options are: ".
+            "{$option} is an invalid conflict option, valid options are: " .
                 implode(', ', self::DELETE_CONFLICT)
         );
     }
@@ -786,7 +784,7 @@ class Builder extends BaseBuilder
     {
         $type = 'NestedDoc';
 
-        if (! is_string($query) && is_callable($query)) {
+        if (!is_string($query) && is_callable($query)) {
             call_user_func($query, $query = $this->newQuery());
         }
 
@@ -1025,7 +1023,7 @@ class Builder extends BaseBuilder
     {
         $options = array_pop($args);
         $type = array_shift($args);
-        $method = $type == 'Basic' ? 'where' : 'where'.$type;
+        $method = $type == 'Basic' ? 'where' : 'where' . $type;
 
         $this->$method(...$args);
 
@@ -1066,7 +1064,7 @@ class Builder extends BaseBuilder
         }
 
         throw new Exception(
-            "{$option} is an invalid conflict option, valid options are: ".
+            "{$option} is an invalid conflict option, valid options are: " .
                 implode(', ', self::DELETE_CONFLICT)
         );
     }

@@ -70,9 +70,9 @@ class Connection extends BaseConnection
         $tablePrefix = '',
         array $config = []
     ) {
-        $credentials = json_decode(env($pdo['varible']), true);
+        //$credentials = json_decode(env($pdo['varible']), true);
         //$elastic = (new Document($credentials['host'], $credentials['api_key']));
-        $this->config = array_merge($pdo, $credentials);
+        $this->config = $config;
 
         // You can pass options directly to the client
         $this->options = Arr::get($pdo, 'options', []);
@@ -108,7 +108,7 @@ class Connection extends BaseConnection
      */
     public function __call($method, $parameters)
     {
-        if (! isset($this->connection) || empty($this->connection)) {
+        if (!isset($this->connection) || empty($this->connection)) {
             $this->connection = $this->createConnection(
                 $this->config,
                 $this->options
@@ -168,13 +168,11 @@ class Connection extends BaseConnection
             yield $result;
         }
 
-        if (! $limit || $limit > $numResults) {
+        if (!$limit || $limit > $numResults) {
             $limit = $limit ? $limit - $numResults : $limit;
 
-            foreach (
-                $this->scroll($scrollId, $scrollTimeout, $limit)
-                as $result
-            ) {
+            foreach ($this->scroll($scrollId, $scrollTimeout, $limit)
+                as $result) {
                 yield $result;
             }
         }
@@ -262,7 +260,7 @@ class Connection extends BaseConnection
         $numResults = 0;
 
         // Loop until the scroll 'cursors' are exhausted or we have enough results
-        while (! $limit || $numResults < $limit) {
+        while (!$limit || $numResults < $limit) {
             // Execute a Scroll request
             $results = $this->createConnection(
                 $this->hosts,
@@ -455,7 +453,7 @@ class Connection extends BaseConnection
                 $result = $this->connection->bulk($params);
             }
 
-            if (! empty($result['errors'])) {
+            if (!empty($result['errors'])) {
                 throw new BulkInsertQueryException($result);
             }
 

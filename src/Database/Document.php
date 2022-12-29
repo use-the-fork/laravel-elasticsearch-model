@@ -2,10 +2,10 @@
 
 namespace UseTheFork\LaravelElasticsearchModel\Database;
 
-use App\Services\Cast;
 use Exception;
-use GuzzleHttp\Client as Guzzle;
 use Illuminate\Support\Arr;
+use GuzzleHttp\Client as Guzzle;
+use UseTheFork\LaravelCast\Cast;
 use Illuminate\Support\Facades\Http;
 
 class Document
@@ -165,7 +165,7 @@ class Document
         try {
             $response = $client->request(
                 'GET',
-                $this->url."/list?page[current]={$page}",
+                $this->url . "/list?page[current]={$page}",
                 [
                     'headers' => [
                         'Authorization' => $this->token,
@@ -187,7 +187,7 @@ class Document
                 ->map(function ($item) {
                     return json_encode($item);
                 })
-                ->implode("\r\n")."\r\n"
+                ->implode("\r\n") . "\r\n"
         );
 
         dd($data);
@@ -210,7 +210,7 @@ class Document
 
     private function addTimestamps($request)
     {
-        if (! isset($request['created_at'])) {
+        if (!isset($request['created_at'])) {
             $request['created_at'] = Cast::date('now', 'c');
         }
 
